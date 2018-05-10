@@ -8,5 +8,5 @@ echo $1
 openvpn $1&
 sleep 10
 cd $current
-python Saddam.py $victom -p ssdp_out.txt -t 1
+python Saddam.py `cat ssdp_selmon2.txt` -p ssdp_out.txt -t 1
 pkill openvpn

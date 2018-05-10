@@ -322,7 +322,6 @@ def main():
 		else:
 			ddos = DDoS(socket.gethostbyname(args[0]), options.threads, domains, event)
 			ddos.stress()
-			Monitor()
 			event.clear()
 	else:
 		parser.print_help()

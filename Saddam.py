@@ -71,7 +71,7 @@ PAYLOAD = {
 	'ntp':('\x17\x00\x02\x2a'+'\x00'*4),
 	'ssdp':('M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\n'
 		'MAN: "ssdp:discover"\r\nMX: 2\r\nST: ssdp:all\r\n\r\n'),
-	'coap':('\x40\x01\x7d\x70\xbb\x2e\x77\x65\x6c\x2d\x6b\x6e\x6f\x77\x6e\x04\x63\x6f\x72\x65'), #https://www.youtube.com/watch?time_continue=551&v=2EgQUP4oFH4
+	'coap':('\x40\x01\x7d\x70\xbb\x2e\x77\x65\x6c\x6c\x2d\x6b\x6e\x6f\x77\x6e\x04\x63\x6f\x72\x65'), #https://www.youtube.com/watch?time_continue=551&v=2EgQUP4oFH4
 }
 
 amplification = {
